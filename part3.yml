@@ -1,0 +1,26 @@
+---
+ - name: Ansible archive Examples
+   user: ubuntu
+   hosts: web
+   tasks:
+    - name: Compress Directory contents
+      become: yes
+      archive:
+        path: ~/.file.txt
+        dest: ~/.file.txt.tar  
+        format: tar
+
+    - name: delete file
+      become: yes
+      file:
+        path: ~/.file.txt
+        state: absent
+    
+    - name: Download foo.conf
+      get_url:
+        url: http://icanhazip.com 
+        dest: ~/
+        mode: '0440'
+
+
+       
