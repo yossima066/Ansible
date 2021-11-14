@@ -35,6 +35,9 @@
        state: started
        enabled: yes
     
+    - name: shell commend
+      shell: sudo docker run -d -p 8080:80 nginx
+      
    handlers:
     - name: restart docker
       service: name=docker state=restarted
