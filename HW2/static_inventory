@@ -1,0 +1,9 @@
+[web-debian]
+node-0 ansible_host=10.0.2.85
+node-1 ansible_host=10.0.2.186
+[web-redhat]
+node-2 ansible_host=10.0.2.53
+[web-debian:vars]
+ansible_user=ubuntu
+[web-redhat:vars]
+ansible_user=ec2-user

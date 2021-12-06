@@ -1,24 +1,44 @@
 ---
-- name: Install Docker engine
+- name: Install dependencies 
   yum:
-    name:
-      - docker
-      - python-pip
-    update_cache: yes
-    state: latest
-
-- name: Install Docker Python
-  pip:
-    name: docker-py
-
-- name: Enable Docker Services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: started
-    enabled: yes
+    name: '{{ item }}'
+    state: installed
+    update_cache: true
   with_items:
-    - docker.service
-    - containerd.service
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+  become: true
+
+- name: Remove previous installation
+  yum:
+    name: '{{ item }}'
+    state: removed
+    update_cache: true
+  with_items:
+    - docker
+    - docker-common
+    - docker-selinux
+    - docker-engine
+  become: true
+
+- name: Add docker repository
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+  become: true
+
+
+- name: Install docker-ce 
+  yum:
+    name: '{{ item }}'
+    state: installed
+    update_cache: true
+  with_items:
+      - docker-ce
+  become: true
+  notify: restart docker
+
 
 - include_tasks: users.yml
 
