@@ -1,0 +1,25 @@
+---
+- name: Install Docker engine
+  yum:
+    name:
+      - docker
+      - python-pip
+    update_cache: yes
+    state: latest
+
+- name: Install Docker Python
+  pip:
+    name: docker-py
+
+- name: Enable Docker Services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - docker.service
+    - containerd.service
+
+- include_tasks: users.yml
+
+- include_tasks: Nginx.yml
